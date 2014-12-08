@@ -1,0 +1,98 @@
+body {
+    background: rgba(255,255,255,1) url(../img/bg.png) repeat top left;
+}
+.window {
+    position: absolute;
+    background: rgba(255,255,255,1) url(../img/bg.png) repeat top left;
+    box-shadow: 0px 0px 12px rgba(0,0,0,0.5);
+      -webkit-box-shadow: 0px 0px 12px rgba(0,0,0,0.5);
+      -moz-box-shadow: 0px 0px 12px rgba(0,0,0,0.5);
+    border: 1px solid rgba(105,105,105,1);
+    overflow: hidden;
+    z-index: 120;
+    height: 360px;
+    width: 480px;
+    margin-top: -180px;
+    margin-left: -240px;
+    top: 50%;
+    left: 50%;
+}
+.window_head, .window_body {
+    position: absolute;
+    width: 100%;
+}
+.window_head {
+    height: 40px;
+    border-bottom: 1px solid rgba(105,105,105,1);
+    background: white;
+}
+.window_head p {
+    font-size: 18px;
+    margin-left: 12px;
+    margin-right: 24px;
+    line-height: 38px;
+}
+.window_body {
+    top: 40px;
+    bottom: 0;
+}
+.window_body_part {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.article {
+    position: relative;
+    width: 100%;
+}
+.article_head {
+    font-size: 16px;
+    padding: 24px 12px 12px 12px;
+    border-bottom: 1px solid rgba(105,105,105,1);
+}
+.item_list {
+    list-style-type: none;
+}
+.item_list li {
+    height: 40px;
+    border-bottom: 1px solid rgba(105,105,105,1);
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+}
+.item_list li:not(.selected):hover {
+    background: rgba(169,169,169,0.5);
+}
+.item_list li p {
+    font-size: 16px;
+    margin-left: 12px;
+    margin-right: 24px;
+    line-height: 38px;
+}
+.item_list li.selected {
+    background: rgba(210,105,30,0.8);
+}
+.item_list li.selected p {
+    color: white;
+}
+
+
+#win_main {
+    height: 800px;
+    width: 1050px;
+    margin-top: -400px;
+    margin-left: -525px;
+}
+#navigate {
+    width: 250px;
+    bottom: 0;
+    border-right: 1px solid rgba(105,105,105,1);
+    background: rgba(169,169,169,0.5);
+}
+#workarea {
+    left: 250px;
+    bottom: 0;
+    right: 0;
+}
+#navigate {
+    overflow-y: auto;
+}
