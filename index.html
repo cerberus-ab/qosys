@@ -19,7 +19,7 @@
             <div class="window_head"><p>Модели теории массового обслуживания</p></div>
             <div class="window_body">
                 <div class="window_body_part" id="navigate">
-                    <div class="article">
+                    <div class="article" id="chmodel">
                         <p class="article_head">Выберите модель:</p>
                         <ul class="item_list" id="model_list">
                             <li name="mm1"><p>M/M/1</p></li>
@@ -27,9 +27,57 @@
                             <li name="mmvkn"><p>M/M/V/K/N, V = K</p></li>
                         </ul>
                     </div>
-                    <div class="article">
+                    <div class="article" id="params">
                         <p class="article_head">Параметры модели:</p>
-
+                        <table class="table_form" id="form_params">
+                            <tr name="poss"><td>
+                                <p class="tf_name">Требование надежности:</p>
+                                <input class="tf_value" type="text" tabindex="1" placeholder="0.00..1.00" value=""
+                                    data-pattern="^(1(\.[0]{0,2})?|0(\.[0-9]{0,2})?)$"
+                                    data-msgerror="вещественное от 0.00 до 1.00"
+                                    data-type="number">
+                                <p class="tf_error"></p>
+                            </td></tr>
+                            <tr name="maxcap"><td>
+                                <p class="tf_name">Максимальное число узлов:</p>
+                                <input class="tf_value" type="text" tabindex="2" placeholder="1..200" value=""
+                                    data-pattern="^(200|1[0-9]{2}|[1-9][0-9]?)$"
+                                    data-msgerror="целое от 1 до 200"
+                                    data-msgempty="не задан параметр"
+                                    data-type="number">
+                                <p class="tf_error"></p>
+                            </td></tr>
+                            <tr name="recv"><td>
+                                <p class="tf_name">Показат. время обслуживание:</p>
+                                <input class="tf_value" type="text" tabindex="3" placeholder="0..." value=""
+                                    data-pattern="^(0|[1-9][0-9]*)(\.[0-9]*)?$"
+                                    data-msgerror="положительное вещественное"
+                                    data-msgempty="не задан параметр"
+                                    data-type="number">
+                                <p class="tf_error"></p>
+                            </td></tr>
+                            <tr name="amount"><td>
+                                <p class="tf_name">Количество заявок:</p>
+                                <input class="tf_value" type="text" tabindex="4" placeholder="1..1000" value=""
+                                    data-pattern="^(1000|([1-9][0-9]{0,2}))$"
+                                    data-msgerror="целое от 1 до 1000"
+                                    data-msgempty="не задан параметр"
+                                    data-type="number">
+                                <p class="tf_error"></p>
+                            </td></tr>
+                            <tr name="send"><td>
+                                <p class="tf_name">Плотность заявок:</p>
+                                <input class="tf_value" type="text" tabindex="5" placeholder="0..." value=""
+                                    data-pattern="^(0|[1-9][0-9]*)(\.[0-9]*)?$"
+                                    data-msgerror="положительное вещественное"
+                                    data-msgempty="не задан параметр"
+                                    data-type="number">
+                                <p class="tf_error"></p>
+                            </td></tr>
+                        </table>
+                    </div>
+                    <div class="article" id="submit">
+                        <button id="but_submit" tabindex="10">Рассчитать</button>
                     </div>
                 </div>
                 <div class="window_body_part" id="workarea"></div>
