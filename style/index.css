@@ -92,7 +92,11 @@ button:disabled {
     background: rgba(255,255,255,0.5);
     cursor: pointer;
 }
-.item_list li:not(.selected):hover {
+.item_list li.disabled {
+    color: #C0C0C0;
+    cursor: default;
+}
+.item_list li:not(.selected):not(.disabled):hover {
     background: rgba(169,169,169,0.5);
 }
 .item_list li p {
@@ -142,7 +146,6 @@ button:disabled {
     display: block;
 }
 
-
 #win_main {
     height: 820px;
     width: 1050px;
@@ -168,4 +171,65 @@ button:disabled {
     float: right;
     margin-top: 12px;
     margin-right: 24px;
+}
+
+.wa_part {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+#wa_table {
+    left: auto;
+    right: 0;
+    bottom: 180px;
+    width: 180px;
+    border-left: 1px solid rgba(105,105,105,1);
+    background: rgba(255,255,255,0.5);
+    overflow-y: auto;
+}
+#wa_result {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    height: 180px;
+    border-top: 1px solid rgba(105,105,105,1);
+    overflow-y: auto;
+    padding: 12px 24px 24px 12px;
+}
+
+#result_table tr {
+    height: 20px;
+    cursor: default;
+}
+#result_table tr:not(.answer):hover {
+    background: rgba(169,169,169,0.5);
+}
+#result_table td {
+    padding-left: 12px;
+    font-size: 14px;
+    font-family: monospace;
+}
+#result_table tr td:first-child {
+    width: 40px;
+}
+#result_table tr.answer {
+    background: rgba(210,105,30,0.8);
+}
+#result_table tr.answer td {
+    color: white;
+}
+
+#wa_result p {
+    font-size: 14px;
+    line-height: 18px;
+}
+#wa_result span.value {
+    font-family: monospace;
+    font-weight: bold;
+}
+#wa_result span.value.red {
+    color: #B22222;
+}
+#wa_result span.value.green {
+    color: #22B222;
 }

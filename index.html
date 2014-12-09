@@ -24,14 +24,14 @@
                         <ul class="item_list" id="model_list">
                             <li name="mm1"><p>M/M/1</p></li>
                             <li name="mmvk"><p>M/M/V/K, V = K</p></li>
-                            <li name="mmvkn"><p>M/M/V/K/N, V = K</p></li>
+                            <li name="mmvkn" class="disabled"><p>M/M/V/K/N, V = K</p></li>
                         </ul>
                     </div>
                     <div class="article" id="params">
                         <p class="article_head">Параметры модели:</p>
                         <table class="table_form" id="form_params">
                             <tr name="poss"><td>
-                                <p class="tf_name">Требование надежности:</p>
+                                <p class="tf_name">Доп. вероятность потери:</p>
                                 <input class="tf_value" type="text" tabindex="1" placeholder="0.00..1.00" value=""
                                     data-pattern="^(1(\.[0]{0,2})?|0(\.[0-9]{0,2})?)$"
                                     data-msgerror="вещественное от 0.00 до 1.00"
@@ -48,9 +48,9 @@
                                 <p class="tf_error"></p>
                             </td></tr>
                             <tr name="recv"><td>
-                                <p class="tf_name">Показат. время обслуживание:</p>
+                                <p class="tf_name">Показат. время обслуживания:</p>
                                 <input class="tf_value" type="text" tabindex="3" placeholder="0..." value=""
-                                    data-pattern="^(0|[1-9][0-9]*)(\.[0-9]*)?$"
+                                    data-pattern="^([1-9][0-9]*(\.[0-9]*)?|0\.[0-9]*[1-9])$"
                                     data-msgerror="положительное вещественное"
                                     data-msgempty="не задан параметр"
                                     data-type="number">
@@ -68,7 +68,7 @@
                             <tr name="send"><td>
                                 <p class="tf_name">Плотность заявок:</p>
                                 <input class="tf_value" type="text" tabindex="5" placeholder="0..." value=""
-                                    data-pattern="^(0|[1-9][0-9]*)(\.[0-9]*)?$"
+                                    data-pattern="^([1-9][0-9]*(\.[0-9]*)?|0\.[0-9]*[1-9])$"
                                     data-msgerror="положительное вещественное"
                                     data-msgempty="не задан параметр"
                                     data-type="number">
@@ -80,7 +80,16 @@
                         <button id="but_submit" tabindex="10">Рассчитать</button>
                     </div>
                 </div>
-                <div class="window_body_part" id="workarea"></div>
+                <div class="window_body_part" id="workarea">
+                    <div class="wa_part" id="wa_graph">
+                    </div>
+                    <div class="wa_part" id="wa_result">
+                    </div>
+                    <div class="wa_part" id="wa_table">
+                        <table id="result_table">
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </DIV>

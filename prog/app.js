@@ -39,10 +39,18 @@
 
     var _test = (function(options) {
         options = $.extend(true, {
+            cb_prepare: function() {
+                // do nothing
+            },
             cb_result: function(result) {
                 console.log(result);
             }
         }, options);
+
+        function preparePoint(point) {
+            // do something
+            return point;
+        }
 
         var test = {
             mm1: {
@@ -50,10 +58,10 @@
                 submit: function(args) {
                     var density = args.send/args.recv;
                     var points = [];
-                    points.push({
+                    points.push(preparePoint({
                         k: 1,
-                        pk: 1/(1 + density)
-                    });
+                        pk: density/(1 + density)
+                    }));
                     return {
                         points: points,
                         params: {
@@ -67,14 +75,19 @@
                 params: ["poss","maxcap","send","recv"],
                 submit: function(args) {
                     var density = args.send/args.recv;
+                    var max_density = Math.log(Number.MAX_VALUE)/Math.log(args.maxcap);
+                    if (density > max_density)
+                        throw { message: "Превышено допустимое для данной конфигурации отношение плотности заявок к показательному времени обслуживания: "
+                            + density + " при допустомом значении ~" + (max_density.toFixed(2))
+                            + ". Это связано с переполнением используемого при расчетах типе данных и в скором времени будет исправлено." };
                     var points = [];
                     for (var i = 1, cur, sum = 1, max = args.maxcap + 1; i != max; i++) {
                         cur = Math.pow(density, i)/getFactorial(i);
                         sum += cur;
-                        points.push({
+                        points.push(preparePoint({
                             k: i,
                             pk: cur/sum
-                        });
+                        }));
                     }
                     return {
                         points: points,
@@ -101,6 +114,7 @@
                 },
                 submit: function(name, args) {
                     try {
+                        options.cb_prepare();
                         if (typeof test[name] === "undefined")
                             throw { message: "Выбрана неизвестная модель!" };
                         var result = { params: args };
@@ -116,11 +130,65 @@
                 }
             }
         }
-    })();
+    })({
+        cb_prepare: function() {
+            $("#result_table").empty();
+            $("#wa_result").empty();
+        },
+        cb_result: function(result) {
+            // to Table
+            ;(function(result, $table, points, needle) {
+                var table_html = "";
+                result.points.forEach(function(point){
+                    table_html += "<tr><td>" + point.k + "</td><td>" + point.pk.toFixed(8) + "</td></tr>";
+                });
+                $table.append(table_html);
+                if (needle !== null) {
+                    for (var i = 0, len = points.length; i != len && points[i].pk > needle; i++);
+                    if (i != len) {
+                        result.answer = {
+                            amount: points[i].k,
+                            pass: points[i].pk,
+                            delta: needle - points[i].pk
+                        };
+                        $("#result_table tr").eq(i).addClass("answer");
+                    }
+                    else result.answer = null;
+                }
+            })(result, $("#result_table"), result.points, result.params.poss);
+            // to Graph
+
+            // to Result
+            ;(function(result, $result) {
+                if (result.params.poss) {
+                    $result.append("<p>Необходимо обслуживающих узлов: "
+                        + (result.answer
+                            ? "<span class='value'>" + result.answer.amount + "</span></p>"
+                            : "<span class='value red'>невозможно</span></p><br>"));
+                    if (result.answer) {
+                        $result.append("<p>Вероятность потери заявки: <span class='value'>~"
+                            + result.answer.pass.toFixed(4) + "</span> [<span class='value green'>+"
+                            + result.answer.delta.toFixed(4) + "</span>]</p><br>");
+                    }
+                }
+                $result.append("<p>Расчеты при количестве обслуживающих узлов: "
+                    + (result.points.length > 1 ? "от 1 до <span class='value'>" + result.points.length + "</span>" : "<span class='value'>1</span>")
+                    + "</p>");
+                $result.append("<p>Затраченное на расчеты время: <span class='value'>~" + result.performance + "</span> мс</p><br>");
+                alert("Расчет эффективности системы завершен." + (result.params.poss !== null
+                    ? (result.answer
+                        ? "\n\nДля обеспечения требуемой надежности системы необходимо как минимум " + result.answer.amount + " обслуживающих узлов."
+                        : "\n\nВ данной конфигурации системы невозможно обеспечить требуемую надежность!")
+                    : ""));
+            })(result, $("#wa_result"));
+
+            console.log(result);
+        }
+    });
 
     $(window).load(function(){
 
-        $("#model_list").delegate("li:not(.selected)", "click", function(event) {
+        $("#model_list").delegate("li:not(.selected):not(.disabled)", "click", function(event) {
             var name = $(this).attr("name"),
                 params = _test.fn.params(name);
             $("#model_list li").removeClass("selected");
