@@ -1,3 +1,15 @@
+#_about {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: right;
+}
+h5 {
+    color: #7F7F7F;
+    font-size: 12px;
+    font-family: monospace;
+}
+
 body {
     background: rgba(255,255,255,1) url(../img/bg.png) repeat top left;
 }
@@ -238,7 +250,6 @@ span.red {
 span.green {
     color: #22B222;
 }
-
 
 #result_graph {
     width: 100%;
