@@ -100,8 +100,32 @@
             mmvkn: {
                 params: ["poss","maxcap","amount","send","recv"],
                 submit: function(args) {
+                    if (args.maxcap > args.amount)
+                        throw { message: "Количество обслуживающих узлов не должно превышать количество заявок!" };
+                    var max_amount = 170;
+                    if (args.amount > max_amount)
+                        throw { message: "Превышено допустимое значение количества заявок: "
+                            + args.amount + " при допустомом значении " + max_amount
+                            + ". Это связано с переполнением используемого при расчетах типе данных и в скором времени будет исправлено." };
+                    var density = args.send/args.recv;
+                    var max_density = Math.log(Number.MAX_VALUE)/Math.log(args.maxcap);
+                    if (density > max_density)
+                        throw { message: "Превышено допустимое для данной конфигурации отношение плотности заявок к показательному времени обслуживания: "
+                            + density + " при допустомом значении ~" + (max_density.toFixed(2))
+                            + ". Это связано с переполнением используемого при расчетах типе данных и в скором времени будет исправлено." };
+                    var points = [];
+                    for (var i = 1, cur, sum = 1/getFactorial(args.amount), max = args.maxcap + 1; i != max; i++) {
+                        cur = Math.pow(density, i)/getFactorial(args.amount - i)/getFactorial(i);
+                        sum += cur;
+                        points.push(preparePoint({
+                            k: i,
+                            pk: cur/sum
+                        }));
+                    }
                     return {
+                        points: points,
                         params: {
+                            density: density
                         }
                     }
                 }
@@ -133,6 +157,7 @@
     })({
         cb_prepare: function() {
             $("#result_table").empty();
+            $("#result_graph").empty();
             $("#wa_result").empty();
         },
         cb_result: function(result) {
@@ -156,19 +181,76 @@
                     else result.answer = null;
                 }
             })(result, $("#result_table"), result.points, result.params.poss);
+
             // to Graph
+            ;(function(result, $graph, points, needle) {
+                var data = [];
+                if (points.length == 1) data.push([0.9999, points[0].pk]);
+                points.forEach(function(point) {
+                    data.push([point.k, point.pk]);
+                });
+                var g = new Dygraph(
+                    $graph.get(0),
+                    data,
+                    {
+                        axisLabelFontSize: 12,
+                        includeZero: true,
+                        labels: ["x", "вероятность потери"],
+                        stackedGraph: true,
+                        labelsDivWidth: needle !== null ? 380 : 280,
+                        underlayCallback: function(canvas, area, g) {
+                           if (needle !== null) {
+                                var poss_line = g.toDomCoords(0, needle)[1];
+                                canvas.fillStyle = "rgba(178,34,34,1)";
+                                canvas.fillRect(area.x, poss_line, area.w, 0.5);
+                                if (result.answer) {
+                                    var amount_line = g.toDomCoords(result.answer.amount, 0)[0];
+                                    canvas.fillStyle = "rgba(210,105,30,0.8)";
+                                    canvas.fillRect(amount_line, area.y, 2, area.h);
+                                }
+                           }
+                        },
+                        axes: {
+                            x: {
+                                axisLabelWidth: 30,
+                                pixelsPerLabel: 30,
+                                axisLabelFormatter: function(value) {
+                                    return Math.round(value) - value !== 0 ? "" : value;
+                                },
+                                valueFormatter: function(value) {
+                                    return Math.round(value);
+                                }
+                            },
+                            y: {
+                                axisLabelWidth: 45,
+                                pixelsPerLabel: 15,
+                                valueRange: [0, 1],
+                                axisLabelFormatter: function(value) {
+                                    return value.toFixed(4);
+                                },
+                                valueFormatter: function(value) {
+                                    return value.toFixed(8)
+                                      + (needle !== null ? " ["
+                                        + ((needle >= value ? "<span class='green'>+" : "<span class='red'>") + (needle - value).toFixed(8)) + "</span>]" : "");
+                                }
+                            }
+                        },
+                        color: "#3F3F3F",
+                        strokeWidth: 1.5
+                    });
+            })(result, $("#result_graph"), result.points, result.params.poss);
 
             // to Result
             ;(function(result, $result) {
-                if (result.params.poss) {
+                if (result.params.poss !== null) {
                     $result.append("<p>Необходимо обслуживающих узлов: "
                         + (result.answer
                             ? "<span class='value'>" + result.answer.amount + "</span></p>"
                             : "<span class='value red'>невозможно</span></p><br>"));
                     if (result.answer) {
                         $result.append("<p>Вероятность потери заявки: <span class='value'>~"
-                            + result.answer.pass.toFixed(4) + "</span> [<span class='value green'>+"
-                            + result.answer.delta.toFixed(4) + "</span>]</p><br>");
+                            + result.answer.pass.toFixed(8) + "</span> [<span class='value green'>+"
+                            + result.answer.delta.toFixed(8) + "</span>]</p><br>");
                     }
                 }
                 $result.append("<p>Расчеты при количестве обслуживающих узлов: "

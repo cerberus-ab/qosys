@@ -4,11 +4,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="Cache-Control" content="no-cache">
-    <title>Qosys</title>
-    <!--
-    <link rel="icon" type="image/png" href="">
-    <link rel="shortcut icon" type="image/png" href="">
-    -->
+    <title>Qosys: Модели ТМО</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png">
     <!-- Stylesheets -->
     <link rel="stylesheet" type="text/css" href="style/default.css">
     <link rel="stylesheet" type="text/css" href="style/index.css">
@@ -24,7 +22,7 @@
                         <ul class="item_list" id="model_list">
                             <li name="mm1"><p>M/M/1</p></li>
                             <li name="mmvk"><p>M/M/V/K, V = K</p></li>
-                            <li name="mmvkn" class="disabled"><p>M/M/V/K/N, V = K</p></li>
+                            <li name="mmvkn"><p>M/M/V/K/N, V = K</p></li>
                         </ul>
                     </div>
                     <div class="article" id="params">
@@ -82,6 +80,7 @@
                 </div>
                 <div class="window_body_part" id="workarea">
                     <div class="wa_part" id="wa_graph">
+                        <div id="result_graph"></div>
                     </div>
                     <div class="wa_part" id="wa_result">
                     </div>
@@ -95,6 +94,7 @@
     </DIV>
     <!-- Javascript Libs -->
     <script type="text/javascript" src="lib/jquery-min.js"></script>
+    <script type="text/javascript" src="lib/dygraph-min.js"></script>
     <!-- Javascript Code -->
     <script type="text/javascript" src="prog/app.js"></script>
 </body>

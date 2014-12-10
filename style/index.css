@@ -196,6 +196,11 @@ button:disabled {
     overflow-y: auto;
     padding: 12px 24px 24px 12px;
 }
+#wa_graph {
+    right: 180px;
+    bottom: 180px;
+    padding: 20px;
+}
 
 #result_table tr {
     height: 20px;
@@ -223,13 +228,19 @@ button:disabled {
     font-size: 14px;
     line-height: 18px;
 }
-#wa_result span.value {
+span.value {
     font-family: monospace;
     font-weight: bold;
 }
-#wa_result span.value.red {
+span.red {
     color: #B22222;
 }
-#wa_result span.value.green {
+span.green {
     color: #22B222;
+}
+
+
+#result_graph {
+    width: 100%;
+    height: 100%;
 }
