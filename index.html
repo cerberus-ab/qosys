@@ -33,9 +33,9 @@
                         <table class="table_form" id="form_params">
                             <tr name="poss"><td>
                                 <p class="tf_name">Доп. вероятность потери:</p>
-                                <input class="tf_value" type="text" tabindex="1" placeholder="0.00..1.00" value="0.3"
-                                    data-pattern="^(1(\.[0]{0,2})?|0(\.[0-9]{0,2})?)$"
-                                    data-msgerror="вещественное от 0.00 до 1.00"
+                                <input class="tf_value" type="text" tabindex="1" placeholder="0.0..1.0" value="0.3"
+                                    data-pattern="^(1|0(\.[0-9]{1,8})?)$"
+                                    data-msgerror="вещественное от 0.0 до 1.0 [8]"
                                     data-type="number">
                                 <p class="tf_error"></p>
                             </td></tr>
@@ -48,29 +48,49 @@
                                     data-type="number">
                                 <p class="tf_error"></p>
                             </td></tr>
-                            <tr name="recv"><td>
-                                <p class="tf_name">Показат. время обслуживания:</p>
-                                <input class="tf_value" type="text" tabindex="3" placeholder="0..." value="0.5"
-                                    data-pattern="^([1-9][0-9]*(\.[0-9]*)?|0\.[0-9]*[1-9])$"
-                                    data-msgerror="положительное вещественное"
-                                    data-msgempty="не задан параметр"
-                                    data-type="number">
-                                <p class="tf_error"></p>
-                            </td></tr>
                             <tr name="amount"><td>
                                 <p class="tf_name">Количество заявок:</p>
-                                <input class="tf_value" type="text" tabindex="4" placeholder="1..150" value="50"
+                                <input class="tf_value" type="text" tabindex="3" placeholder="1..150" value="50"
                                     data-pattern="^(150|1[0-4][0-9]|[1-9][0-9]?)$"
                                     data-msgerror="целое от 1 до 150"
                                     data-msgempty="не задан параметр"
                                     data-type="number">
                                 <p class="tf_error"></p>
                             </td></tr>
+                            <!--
                             <tr name="send"><td>
-                                <p class="tf_name">Плотность заявок:</p>
-                                <input class="tf_value" type="text" tabindex="5" placeholder="0..." value="2"
-                                    data-pattern="^([1-9][0-9]*(\.[0-9]*)?|0\.[0-9]*[1-9])$"
-                                    data-msgerror="положительное вещественное"
+                                <p class="tf_name">Интенсивность заявок:</p>
+                                <input class="tf_value" type="text" tabindex="4" placeholder="0.0..100.0" value="2"
+                                    data-pattern="^(100|[1-9][0-9]?(\.[0-9]{1,8})?|0\.[0-9]{0,7}[1-9])$"
+                                    data-msgerror="вещественное от 0.0 до 100.0 [8]"
+                                    data-msgempty="не задан параметр"
+                                    data-type="number">
+                                <p class="tf_error"></p>
+                            </td></tr>
+                            <tr name="recv"><td>
+                                <p class="tf_name">Показат. время обслуживания:</p>
+                                <input class="tf_value" type="text" tabindex="5" placeholder="0.0..100.0" value="0.5"
+                                    data-pattern="^(100|[1-9][0-9]?(\.[0-9]{1,8})?|0\.[0-9]{0,7}[1-9])$"
+                                    data-msgerror="вещественное от 0.0 до 100.0 [8]"
+                                    data-msgempty="не задан параметр"
+                                    data-type="number">
+                                <p class="tf_error"></p>
+                            </td></tr>
+                            -->
+                            <tr name="density_const"><td>
+                                <p class="tf_name">Показат. интенсивность заявок:</p>
+                                <input class="tf_value" type="text" tabindex="6" placeholder="0.0..1.0" value="0.5"
+                                    data-pattern="^(1|0(\.[0-9]{1,8})?)$"
+                                    data-msgerror="вещественное от 0.0 до 1.0 [8]"
+                                    data-msgempty="не задан параметр"
+                                    data-type="number">
+                                <p class="tf_error"></p>
+                            </td></tr>
+                            <tr name="density_var"><td>
+                                <p class="tf_name">Интенсивность нагрузки:</p>
+                                <input class="tf_value" type="text" tabindex="7" placeholder="0.0..1.0" value="0.5"
+                                    data-pattern="^(1|0(\.[0-9]{1,8})?)$"
+                                    data-msgerror="вещественное от 0.0 до 1.0 [8]"
                                     data-msgempty="не задан параметр"
                                     data-type="number">
                                 <p class="tf_error"></p>

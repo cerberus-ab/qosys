@@ -107,35 +107,28 @@
          */
         var test = {
             mm1: {
-                params: ["poss","send","recv"],
+                params: ["poss","density_const"],
                 submit: function(args) {
-                    var density = args.send/args.recv;
                     var points = [];
                     points.push(preparePoint({
                         k: 1,
-                        pk: density/(1 + density)
+                        pk: args.density_const/(1 + args.density_const)
                     }));
                     return {
                         points: points,
                         params: {
-                            density: density,
                             maxcap: 1 // правка для одноканальной
                         }
                     }
                 }
             },
             mmvk: {
-                params: ["poss","maxcap","send","recv"],
+                params: ["poss","maxcap","density_const"],
                 submit: function(args) {
-                    var density = args.send/args.recv;
-                    // проверка данных
-                    var max_density = 150; //Math.log(Number.MAX_VALUE)/Math.log(args.maxcap);
-                    if (density > max_density)
-                        throw { message: "Приведенная плотность потока заявок не должна превышать значение " + max_density + "!" };
                     // расчет точек вероятности
                     var points = [];
                     for (var i = 1, cur, sum = 1, max = args.maxcap + 1; i != max; i++) {
-                        cur = Math.pow(density, i)/getFactorial(i);
+                        cur = Math.pow(args.density_const, i)/getFactorial(i);
                         sum += cur;
                         points.push(preparePoint({
                             k: i,
@@ -143,23 +136,16 @@
                         }));
                     }
                     return {
-                        points: points,
-                        params: {
-                            density: density
-                        }
+                        points: points
                     }
                 }
             },
             mmvkn: {
-                params: ["poss","maxcap","amount","send","recv"],
+                params: ["poss","maxcap","amount","density_var"],
                 submit: function(args) {
-                    var density = args.send/args.recv;
-                    // расчет точек вероятности
                     if (args.maxcap > args.amount)
                         throw { message: "Количество обслуживающих узлов не должно превышать количество заявок!" };
-                    var max_density = 150; //Math.log(Number.MAX_VALUE)/Math.log(args.maxcap);
-                    if (density > max_density)
-                        throw { message: "Приведенная плотность потока заявок не должна превышать значение " + max_density + "!" };
+                    var density = args.density_var/(1 - args.density_var);
                     // расчет точек вероятности
                     var points = [];
                     for (var i = 1, cur, sum = 1/getFactorial(args.amount), max = args.maxcap + 1; i != max; i++) {
@@ -171,10 +157,7 @@
                         }));
                     }
                     return {
-                        points: points,
-                        params: {
-                            density: density
-                        }
+                        points: points
                     }
                 }
             }
